@@ -100,4 +100,14 @@ class Custom_Woocommerce_Features_Public {
 
 	}
 
+
+	/**
+	 * Prints a message to Woocommerce Checkout screen 
+	 *
+	 * @since    1.0.0
+	 */
+	public function print_message(){
+		//TO-DO
+	}
+
 }

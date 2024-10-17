@@ -74,6 +74,8 @@ class Custom_Woocommerce_Features_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/custom-woocommerce-features-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'bootstrap-css', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
+		//podría usar también Bulma o cualquier otra libreria de css ;)
 
 	}
 
@@ -97,7 +99,46 @@ class Custom_Woocommerce_Features_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/custom-woocommerce-features-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'bootstrap-js', plugin_dir_url( __FILE__ ) . 'js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
 
+	}
+
+	/**
+	 * Register plugin menus.
+	 *
+	 * register menus.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function register_menus()
+	{
+		add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__,'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
+	}
+
+	/**
+	 * Register plugin page.
+	 *
+	 * register admin page.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function custom_woocommerce_features_page() {
+		include_once plugin_dir_path( __FILE__ ) . 'partials\custom-woocommerce-features-admin-display.php';
+	}
+
+	/**
+	 * Register plugin settings.
+	 *
+	 * register custom plugin settings fields.
+	 *
+	 * @since    1.0.0
+	 */
+	public function register_plugin_settings(){
+		register_setting('custom-woocommerce-features-settings','text');
+		register_setting('custom-woocommerce-features-settings','monto1');
+		register_setting('custom-woocommerce-features-settings','porcentaje1');
+		register_setting('custom-woocommerce-features-settings','monto2');
+		register_setting('custom-woocommerce-features-settings','porcentaje2');
 	}
 
 }

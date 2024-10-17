@@ -20,7 +20,8 @@
  * @subpackage Custom_Woocommerce_Features/includes
  * @author     Jhonaiquel Rodríguez <jhonaiquel@gmail.com>
  */
-class Custom_Woocommerce_Features_Activator {
+class Custom_Woocommerce_Features_Activator
+{
 
 	/**
 	 * Short Description. (use period)
