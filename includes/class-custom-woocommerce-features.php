@@ -156,6 +156,10 @@ class Custom_Woocommerce_Features {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		//register menus
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menus' );
+		//register settings
+		$this->loader->add_action('admin_init',$plugin_admin,'register_plugin_settings');
 
 	}
 
@@ -172,6 +176,7 @@ class Custom_Woocommerce_Features {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'woocommerce_before_checkout_form', $plugin_public, 'print_message' );
 
 	}
 
