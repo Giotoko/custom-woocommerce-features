@@ -20,7 +20,8 @@
  * @subpackage Custom_Woocommerce_Features/public
  * @author     Jhonaiquel Rodríguez <jhonaiquel@gmail.com>
  */
-class Custom_Woocommerce_Features_Public {
+class Custom_Woocommerce_Features_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Custom_Woocommerce_Features_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Custom_Woocommerce_Features_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +75,7 @@ class Custom_Woocommerce_Features_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/custom-woocommerce-features-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/custom-woocommerce-features-public.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -82,7 +83,8 @@ class Custom_Woocommerce_Features_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -96,18 +98,44 @@ class Custom_Woocommerce_Features_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/custom-woocommerce-features-public.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/custom-woocommerce-features-public.js', array('jquery'), $this->version, false);
 	}
 
 
 	/**
-	 * Prints a message to Woocommerce Checkout screen 
+	 * Prints a message to Woocommerce Checkout screen.
 	 *
 	 * @since    1.0.0
 	 */
-	public function print_message(){
-		//TO-DO
-	}
+	public function print_message()
+	{
 
+		$text = get_option('text') ?? " no text ";
+		$amount1 = get_option('monto1') ?? 0;
+		$percentage1 = get_option('porcentaje1') ?? 0;
+		$amount2 = get_option('monto2') ?? 0;
+		$percentage2 = get_option('porcentaje2') ?? 0;
+		$cart_total = 0;
+
+		if (is_checkout() && ! is_wc_endpoint_url() && WC()->cart) {
+			$cart_total = WC()->cart->subtotal;
+			if ($cart_total < $amount1 && $cart_total < $amount2) {
+
+				$text = str_replace('{monto}', $amount1 . '$', $text);
+				$text = str_replace('{porcentaje}', $percentage1 . '%', $text);
+
+				wc_print_notice($text, 'notice'); //Woocommerce < 8.3
+			} elseif ($cart_total >= $amount1 && $cart_total < $amount2) {
+
+				$text = str_replace('{monto}', $amount2 . '$', $text);
+				$text = str_replace('{porcentaje}', $percentage2 . '%', $text);
+
+				wc_print_notice($text, 'notice');
+
+			} else {
+
+				wc_print_notice('¡mientras mas compras mas ahorras!', 'notice');
+			}
+		}
+	}
 }

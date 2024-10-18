@@ -16,7 +16,7 @@
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <?php
 defined('ABSPATH') or die("how did you get here?");
-if (!current_user_can('administrator')) {
+if (!current_user_can('edit_posts')) {
     wp_die(__('you dont have permisssion to be here.'));
 }
 ?>
