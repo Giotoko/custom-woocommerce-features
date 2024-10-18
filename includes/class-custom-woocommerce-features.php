@@ -160,6 +160,17 @@ class Custom_Woocommerce_Features {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menus' );
 		//register settings
 		$this->loader->add_action('admin_init',$plugin_admin,'register_plugin_settings');
+		//check if woocommerce is active
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		}
+		if (!is_plugin_active('woocommerce/woocommerce.php')) {
+			$this->loader->add_action('admin_notices', $plugin_admin, 'no_woocommerce_message');
+			// Deactivate this plugin
+			if(is_plugin_active('custom-woocommerce-features/custom-woocommerce-features.php')){
+				deactivate_plugins( 'custom-woocommerce-features/custom-woocommerce-features.php');
+			}
+		}
 
 	}
 
@@ -177,7 +188,7 @@ class Custom_Woocommerce_Features {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'woocommerce_before_checkout_form', $plugin_public, 'print_message' );
-
+		add_shortcode('woocommerce_custom_features', array($plugin_public,'print_message'));
 	}
 
 	/**

@@ -20,7 +20,8 @@
  * @subpackage Custom_Woocommerce_Features/admin
  * @author     Jhonaiquel Rodríguez <jhonaiquel@gmail.com>
  */
-class Custom_Woocommerce_Features_Admin {
+class Custom_Woocommerce_Features_Admin
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Custom_Woocommerce_Features_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Custom_Woocommerce_Features_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +75,8 @@ class Custom_Woocommerce_Features_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/custom-woocommerce-features-admin.css', array(), $this->version, 'all' );
-		wp_enqueue_style( 'bootstrap-css', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/custom-woocommerce-features-admin.css', array(), $this->version, 'all');
+		wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), $this->version, 'all');
 		//podría usar también Bulma o cualquier otra libreria de css ;)
 
 	}
@@ -84,7 +86,8 @@ class Custom_Woocommerce_Features_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -98,9 +101,8 @@ class Custom_Woocommerce_Features_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/custom-woocommerce-features-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'bootstrap-js', plugin_dir_url( __FILE__ ) . 'js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/custom-woocommerce-features-admin.js', array('jquery'), $this->version, false);
+		wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'), $this->version, false);
 	}
 
 	/**
@@ -112,7 +114,7 @@ class Custom_Woocommerce_Features_Admin {
 	 */
 	public static function register_menus()
 	{
-		add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__,'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
+		add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__, 'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
 	}
 
 	/**
@@ -122,8 +124,9 @@ class Custom_Woocommerce_Features_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function custom_woocommerce_features_page() {
-		include_once plugin_dir_path( __FILE__ ) . 'partials\custom-woocommerce-features-admin-display.php';
+	public static function custom_woocommerce_features_page()
+	{
+		include_once plugin_dir_path(__FILE__) . 'partials\custom-woocommerce-features-admin-display.php';
 	}
 
 	/**
@@ -133,12 +136,25 @@ class Custom_Woocommerce_Features_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function register_plugin_settings(){
-		register_setting('custom-woocommerce-features-settings','text');
-		register_setting('custom-woocommerce-features-settings','monto1');
-		register_setting('custom-woocommerce-features-settings','porcentaje1');
-		register_setting('custom-woocommerce-features-settings','monto2');
-		register_setting('custom-woocommerce-features-settings','porcentaje2');
+	public function register_plugin_settings()
+	{
+		register_setting('custom-woocommerce-features-settings', 'text');
+		register_setting('custom-woocommerce-features-settings', 'monto1');
+		register_setting('custom-woocommerce-features-settings', 'porcentaje1');
+		register_setting('custom-woocommerce-features-settings', 'monto2');
+		register_setting('custom-woocommerce-features-settings', 'porcentaje2');
 	}
 
+	/**
+	 * shows message if woocommerce is not installed or activated.
+	 *
+	 * shows admin error message.
+	 *
+	 * @since    1.0.0
+	 */
+	public function no_woocommerce_message(){
+		echo '<div class="alert alert-danger notice is-dismissible">
+        <p> Este plugin utiliza Woocommerce y no puede funcionar sin él, asegúrate que Woocommerce está instalado y activado</p>
+    </div>';
+	}
 }
