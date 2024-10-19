@@ -76,9 +76,6 @@ class Custom_Woocommerce_Features_Admin
 		 */
 
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/custom-woocommerce-features-admin.css', array(), $this->version, 'all');
-		wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), $this->version, 'all');
-		//podría usar también Bulma o cualquier otra libreria de css ;)
-
 	}
 
 	/**
@@ -102,7 +99,6 @@ class Custom_Woocommerce_Features_Admin
 		 */
 
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/custom-woocommerce-features-admin.js', array('jquery'), $this->version, false);
-		wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'), $this->version, false);
 	}
 
 	/**
@@ -114,7 +110,8 @@ class Custom_Woocommerce_Features_Admin
 	 */
 	public static function register_menus()
 	{
-		add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__, 'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
+		$hook = add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__, 'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
+		add_action('load-' . $hook, array(get_called_class(), 'load_bootstrap'));
 	}
 
 	/**
@@ -152,9 +149,29 @@ class Custom_Woocommerce_Features_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function no_woocommerce_message(){
+	public function no_woocommerce_message()
+	{
 		echo '<div class="alert alert-danger notice is-dismissible">
         <p> Este plugin utiliza Woocommerce y no puede funcionar sin él, asegúrate que Woocommerce está instalado y activado</p>
     </div>';
+	}
+
+	/**
+	 * load bootstrap only in plugin settings page.
+	 *
+	 * to avoid style conflicts in admin theme.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function enqueue_bootstrap()
+	{
+		wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'),'1.0.0', false);
+		wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), '1.0.0', 'all');
+		//podría usar también Bulma o cualquier otra libreria de css ;)
+	}
+
+	public static function load_bootstrap()
+	{
+		add_action('admin_enqueue_scripts', array(get_called_class(),'enqueue_bootstrap'));
 	}
 }
