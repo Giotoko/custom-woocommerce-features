@@ -110,8 +110,10 @@ class Custom_Woocommerce_Features_Admin
 	 */
 	public static function register_menus()
 	{
-		$hook = add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__, 'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
-		add_action('load-' . $hook, array(get_called_class(), 'load_bootstrap'));
+		$hook1 = add_menu_page('Custom Woocommerce features', 'Custom Woocommerce features', 'manage_options', 'woocommerce-features-menu', array(__CLASS__, 'custom_woocommerce_features_page'), 'dashicons-smiley', 3);
+		$hook2 = add_submenu_page('woocommerce-features-menu','Custom Woocommerce database', 'Custom Woocommerce database', 'manage_options', 'woocommerce-features-menu-database', array(__CLASS__, 'custom_woocommerce_features_database'),1);
+		add_action('load-' . $hook1, array(get_called_class(), 'load_bootstrap'));
+		add_action('load-' . $hook2, array(get_called_class(), 'load_bootstrap'));
 	}
 
 	/**
@@ -124,6 +126,18 @@ class Custom_Woocommerce_Features_Admin
 	public static function custom_woocommerce_features_page()
 	{
 		include_once plugin_dir_path(__FILE__) . 'partials\custom-woocommerce-features-admin-display.php';
+	}
+
+	/**
+	 * Register plugin database page.
+	 *
+	 * register admin database page.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function custom_woocommerce_features_database()
+	{
+		include_once plugin_dir_path(__FILE__) . 'partials\custom-woocommerce-features-admin-database.php';
 	}
 
 	/**
@@ -168,6 +182,8 @@ class Custom_Woocommerce_Features_Admin
 		wp_enqueue_script('bootstrap-js', plugin_dir_url(__FILE__) . 'js/bootstrap.min.js', array('jquery'),'1.0.0', false);
 		wp_enqueue_style('bootstrap-css', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), '1.0.0', 'all');
 		//podría usar también Bulma o cualquier otra libreria de css ;)
+		wp_enqueue_script('datatables-js', plugin_dir_url(__FILE__) . 'js/datatables.min.js', array('jquery'),'1.0.0', false);
+		wp_enqueue_style('datatables-css', plugin_dir_url(__FILE__) . 'css/datatables.min.css', array(), '1.0.0', 'all');
 	}
 
 	public static function load_bootstrap()
