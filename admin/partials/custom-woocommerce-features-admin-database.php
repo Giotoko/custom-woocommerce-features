@@ -19,13 +19,18 @@ defined('ABSPATH') or die("how did you get here?");
 if (!current_user_can('edit_posts')) {
     wp_die(__('you dont have permisssion to be here.'));
 }
-global $wpdb;
-$orders = $wpdb->get_results("
+function get_orders()
+{
+    global $wpdb;
+    $orders = $wpdb->get_results("
 SELECT orders.id AS id, users.display_name AS nombre, DATE_FORMAT(orders.date_created_gmt,'%d/%m/%Y') AS fecha, TRUNCATE(orders.total_amount, 2) AS total
 FROM `wp_wc_orders` AS orders
 JOIN `wp_users` AS users
 WHERE MONTH(orders.date_created_gmt) = MONTH(CURRENT_TIMESTAMP)
 ORDER BY fecha DESC ");
+    return $orders;
+}
+
 ?>
 <div class="container card">
     <p class="h2">Custom Woocommerce Features</p>
@@ -47,6 +52,7 @@ ORDER BY fecha DESC ");
         </thead>
         <tbody>
             <?php
+            $orders = get_orders();
             foreach ($orders as $order) {
                 echo "<tr>";
                 echo "<td>" . $order->id . "</td>";
